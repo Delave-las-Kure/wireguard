@@ -34,5 +34,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_SECRET }}
 
       - name: Build and push
-        run: docker build -t fieron/wireguard:latest -t fieron/wireguard:${{ github.ref_name }} . && docker push fieron/wireguard:latest fieron/wireguard:${{ github.ref_name }}
+        run: docker build -t fieron/wireguard:latest -t fieron/wireguard:${{ github.ref_name }} . && \
+          docker push fieron/wireguard:latest && \
+          docker push fieron/wireguard:${{ github.ref_name }}
 
