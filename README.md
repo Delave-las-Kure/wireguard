@@ -15,9 +15,9 @@ Wireguard image with built-in api server wgrest.
 	```
 2. Fill `.env` file:
    ```
-   SUPPORT_EMAIL= # Щзешщтфд
-   DOMAIN= # Server Domain
-   TZ= # Server Timezone
+   SUPPORT_EMAIL= # Optional
+   DOMAIN= # Server Domain. For example: vpnserver.com
+   TZ= # Server Timezone. For Example: Europe/London
 	```
 	Rest API will be available at `wgrest.domain`. The address of the wireguard will be `wireguard.domain`.
 3. Fill `secrets/api-key` file. This key will be used as a bearer token for the rest api.
