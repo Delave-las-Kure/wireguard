@@ -19,7 +19,7 @@ Wireguard image with built-in api server wgrest.
    DOMAIN= # Server Domain
    TZ= # Server Timezone
 	```
-	Rest API will be available at wgrest.domain. The address of the wireguard will be `wireguard.domain`.
+	Rest API will be available at `wgrest.domain`. The address of the wireguard will be `wireguard.domain`.
 3. Fill `secrets/api-key` file. This key will be used as a bearer token for the rest api.
 4.	Run docker containers:
     ```sh
