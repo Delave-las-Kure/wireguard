@@ -2,8 +2,6 @@ version: "3.9"
 services:
   wireguard:
     container_name: wireguard
-    image: fieron/wireguard:latest
-    build: .
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -18,6 +16,7 @@ services:
       VIRTUAL_HOST: wgrest.${DOMAIN}
       VIRTUAL_PORT: 8000
       LETSENCRYPT_HOST: wgrest.${DOMAIN}
+      API_KEY_FILE: /run/secrets/api-key
     volumes:
       - ./config:/config
       - /lib/modules:/lib/modules
@@ -29,6 +28,8 @@ services:
       - net.ipv4.conf.all.src_valid_mark=1
     networks:
       - net
+    secrets:
+      - api-key
 
   nginx-proxy:
     image: jwilder/nginx-proxy:alpine
@@ -65,3 +66,7 @@ services:
 
 networks:
   net:
+
+secrets:
+  api-key:
+    file: ./secrets/api-key
