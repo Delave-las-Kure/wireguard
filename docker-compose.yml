@@ -1,6 +1,7 @@
 version: "3.9"
 services:
   wireguard:
+    image: fieron/wireguard:latest
     container_name: wireguard
     cap_add:
       - NET_ADMIN
