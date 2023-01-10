@@ -104,3 +104,6 @@ secrets:
   api-key:
     file: ./secrets/api-key
 ```
+## Tips:
+
+1. Use `SaveConfig = true` in wg0.conf.
