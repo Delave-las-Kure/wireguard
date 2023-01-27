@@ -21,7 +21,7 @@ services:
     volumes:
       - ./config:/config
       - /lib/modules:/lib/modules
-      - ./wgrest:/etc/wgrest
+      - ./wgrest:/var/lib/wgrest
     ports:
       - 8000:8000
       - 51820:51820/udp
