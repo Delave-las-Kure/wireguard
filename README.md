@@ -104,6 +104,18 @@ secrets:
   api-key:
     file: ./secrets/api-key
 ```
+
+## Import to another server
+The following conditions must be met for a seamless migration:
+1. Domains of the old and new server must match
+2. The new server must have a clean wgrest, i.e. without peers.
+
+### Manual migration
+
+In manual migration mode you must:
+1. Copy `config` and `wgrest` folders from the old server to the new one.
+2. Run docker containers.
+
 ## Tips:
 
 1. Use `SaveConfig = true` in wg0.conf.
