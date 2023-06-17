@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  wgrest-dev:
+    container_name: wgrest-dev
+    build:
+      context: .
+      dockerfile: ./dockerfile
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: ${TZ}
+      PEERS: 1 #optional
+      SERVERURL: wireguard.${DOMAIN} #optional
+      SERVERPORT: 51820 #optional
+      PEERDNS: auto #optional
+      VIRTUAL_HOST: wgrest.${DOMAIN}
+      VIRTUAL_PORT: 8000
+      LETSENCRYPT_HOST: wgrest.${DOMAIN}
+      API_KEY_FILE: /run/secrets/api-key
+    volumes:
+      - ./config:/config
+      - /lib/modules:/lib/modules
+      - ./wgrest:/var/lib/wgrest
+    ports:
+      - 8000:8000
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    secrets:
+      - api-key
+
+secrets:
+  api-key:
+    file: ./secrets/api-key

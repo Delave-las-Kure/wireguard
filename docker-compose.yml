@@ -3,6 +3,7 @@ services:
   wireguard:
     image: fieron/wireguard:latest
     container_name: wireguard
+    restart: always
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
