@@ -39,6 +39,7 @@ services:
   wireguard:
     image: fieron/wireguard:latest
     container_name: wireguard
+    restart: always
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -57,7 +58,7 @@ services:
     volumes:
       - ./config:/config
       - /lib/modules:/lib/modules
-      - ./wgrest:/etc/wgrest
+      - ./wgrest:/var/lib/wgrest
     ports:
       - 8000:8000
       - 51820:51820/udp
@@ -67,6 +68,7 @@ services:
       - net
     secrets:
       - api-key
+
   nginx-proxy:
     image: jwilder/nginx-proxy:alpine
     container_name: nginx-proxy
@@ -83,6 +85,7 @@ services:
     ports:
       - 80:80
       - 443:443
+
   letsencrypt:
     image: nginxproxy/acme-companion:latest
     container_name: nginx-proxy-acme
@@ -98,8 +101,10 @@ services:
       - nginx-proxy
     networks:
       - net
+
 networks:
   net:
+
 secrets:
   api-key:
     file: ./secrets/api-key
