@@ -39,7 +39,6 @@ services:
   wireguard:
     image: fieron/wireguard:latest
     container_name: wireguard
-    restart: always
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -58,7 +57,7 @@ services:
     volumes:
       - ./config:/config
       - /lib/modules:/lib/modules
-      - ./wgrest:/var/lib/wgrest
+      - ./wgrest:/etc/wgrest
     ports:
       - 8000:8000
       - 51820:51820/udp
@@ -68,7 +67,6 @@ services:
       - net
     secrets:
       - api-key
-
   nginx-proxy:
     image: jwilder/nginx-proxy:alpine
     container_name: nginx-proxy
@@ -85,7 +83,6 @@ services:
     ports:
       - 80:80
       - 443:443
-
   letsencrypt:
     image: nginxproxy/acme-companion:latest
     container_name: nginx-proxy-acme
@@ -101,10 +98,8 @@ services:
       - nginx-proxy
     networks:
       - net
-
 networks:
   net:
-
 secrets:
   api-key:
     file: ./secrets/api-key
@@ -119,6 +114,24 @@ The following conditions must be met for a seamless migration:
 In manual migration mode you must:
 1. Copy `config` and `wgrest` folders from the old server to the new one.
 2. Run docker containers.
+
+### Automatic migration
+1.  Deploy a new clean wiergard server to which you will migrate peers.
+2.  Forward the domain of the old server to the new one. Since domain forwarding does not happen immediately you can set the new server's `apiUrl` value as ip: `http://<IP>/v1`.
+3.  Send a request to the router `/migration` (see open api of the VPN BFF / vpn orchestrator) with the following parameters:
+    ```
+    # **Id of the new and old server may be the same
+    {
+      "fromServerId": 1,          # Old server id
+      "toServerId": 2,            # New server id
+      "replacePrivateKey": true   # Overwrite the private key of the new server with the old one
+    }
+    ```
+`Note`: 
+1.  that the new server must be clean with no peers. 
+2.  Also, the new server will not work until the domain has been forwarded to the new server.
+3.  The domains of the old and new server must match. Otherwise already created peers on the old server will not work.
+4.  The private keys of the old and new server must be the same. Otherwise the public keys of the old server's peers will not be valid. I.e. the peers will not work.
 
 ## Tips:
 
