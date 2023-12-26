@@ -7,6 +7,13 @@ services:
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8000/version || exit 1
+      #test: curl -sS 127.0.0.1:8080 || exit 1
+      interval: 20s
+      timeout: 10s
+      retries: 3
+      start_period: 1m30s
     environment:
       PUID: 1000
       PGID: 1000
@@ -63,6 +70,16 @@ services:
       - ./nginx/acme:/etc/acme.sh
     depends_on:
       - nginx-proxy
+    networks:
+      - net
+
+  autoheal:
+    restart: always
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - net
 
